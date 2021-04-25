@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { User, Event } = require("../models");
+const { Sequelize, User, Event } = require("../models");
 
 async function getUser(slug) {
   try {
@@ -16,11 +16,17 @@ async function getUser(slug) {
     const ownedEvents = await Event.findAll({
       where: {
         ownerId: user.id,
+        date: { [Sequelize.Op.gte]: new Date() },
       },
+      order: [["date", "asc"]],
+      limit: 10,
     });
+
+    user.dataValues.events = ownedEvents;
 
     return user;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
