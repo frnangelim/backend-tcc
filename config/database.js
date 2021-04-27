@@ -22,6 +22,7 @@ const database = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     dialect: "mysql",
+    host: process.env.DB_HOST,
     options: {
       host: process.env.DB_HOST,
       dialect: "mysql",
