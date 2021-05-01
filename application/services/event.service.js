@@ -48,6 +48,7 @@ async function getUserEvents(user) {
       where: {
         ownerId: user.id,
       },
+      order: [["updatedAt", "desc"]],
     });
 
     const userEnrollments = (
@@ -55,6 +56,7 @@ async function getUserEvents(user) {
         where: {
           email: user.email,
         },
+        order: [["updatedAt", "desc"]],
         include: [{ model: Event, as: "event" }],
       })
     ).map((e) => e.event);
