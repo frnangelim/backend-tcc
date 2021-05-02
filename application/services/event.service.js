@@ -1,4 +1,4 @@
-const RestService = require("../services/rest.service");
+const RestService = require("./rest.service");
 const {
   Sequelize,
   sequelize,
@@ -101,11 +101,21 @@ async function getList(body) {
     const limit = Number(body.limit) || 10;
     const page = Number(body.page) || 1;
     const offset = limit * page - limit;
+    const search = body.search;
 
     let count = 0;
     let items = [];
     let pages = 1;
     let where = {};
+
+    if (body.search) {
+      where = {
+        [Sequelize.Op.or]: [
+          { title: { [Sequelize.Op.like]: `%${body.search}%` } },
+          { address: { [Sequelize.Op.like]: `%${body.search}%` } },
+        ],
+      };
+    }
 
     const filters = body.filters;
     if (filters) {
